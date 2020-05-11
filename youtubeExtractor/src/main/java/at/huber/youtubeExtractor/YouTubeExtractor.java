@@ -565,6 +565,13 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
     }
 
     private void parseVideoMeta(String getVideoInfo) {
+        // prints the video info, logcat truncates messages > 4096 chars
+//        int stringLength = getVideoInfo.length();
+//        for (int i = 0; i < stringLength; i+=3000) {
+//            int end = Math.min(i + 3000, stringLength);
+//            Log.i("ExtractorInfo", getVideoInfo.substring(i, end));
+//        }
+
         boolean isLiveStream = false;
         String title = null, author = null, channelId = null, shortDescript = null;
         long viewCount = 0, length = 0;
