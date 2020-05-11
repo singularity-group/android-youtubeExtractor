@@ -69,7 +69,7 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
     private static final Pattern patShortDescript = Pattern.compile("\"shortDescription\"\\s*:\\s*\"(.+?)\"");
     private static final Pattern patStatusOk = Pattern.compile("status=ok(&|,|\\z)");
 
-    private static final Pattern patHlsvp = Pattern.compile("hlsvp=(.+?)(&|\\z)");
+    private static final Pattern patHlsManifestUrl = Pattern.compile("\"hlsManifestUrl\"\\s*:\\s*\"(.+?)\"");
     private static final Pattern patHlsItag = Pattern.compile("/itag/(\\d+?)/");
 
     private static final Pattern patItag = Pattern.compile("itag=([0-9]+?)(&|\\z)");
@@ -261,18 +261,19 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         parseVideoMeta(streamMap);
 
         if(videoMeta.isLiveStream()){
-            mat = patHlsvp.matcher(streamMap);
+            mat = patHlsManifestUrl.matcher(streamMap);
             if(mat.find()) {
-                String hlsvp = URLDecoder.decode(mat.group(1), "UTF-8");
+                String hlsManifestUrl = URLDecoder.decode(mat.group(1), "UTF-8");
                 SparseArray<YtFile> ytFiles = new SparseArray<>();
 
-                getUrl = new URL(hlsvp);
+                getUrl = new URL(hlsManifestUrl);
                 urlConnection = (HttpURLConnection) getUrl.openConnection();
                 urlConnection.setRequestProperty("User-Agent", USER_AGENT);
                 try {
                     reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     String line;
                     while ((line = reader.readLine()) != null) {
+                       // read this hls master playlist and identify the itag of each variant
                        if(line.startsWith("https://") || line.startsWith("http://")){
                            mat = patHlsItag.matcher(line);
                            if(mat.find()){
@@ -572,7 +573,7 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
             title = mat.group(1);
         }
 
-        mat = patHlsvp.matcher(getVideoInfo);
+        mat = patHlsManifestUrl.matcher(getVideoInfo);
         if(mat.find())
             isLiveStream = true;
 

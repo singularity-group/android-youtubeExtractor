@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNotSame;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @FlakyTest
@@ -60,11 +62,14 @@ public class ExtractorTestCases {
         // extractorTestDashManifest("http://www.youtube.com/watch?v=61Ev-YvBw2c");
     }
 
-//    public void testLiveStream() throws Throwable {
-//        VideoMeta expMeta = new VideoMeta("ddFvjfvPnqk", "NASA Live Stream - Earth From Space (Full Screen) | ISS LIVE FEED - Debunk Flat Earth",
-//                "Space Videos", "UCakgsb0w7QB0VHdnCc-OVEA", 0, 0, true);
-//        extractorTest("http://www.youtube.com/watch?v=ddFvjfvPnqk", expMeta);
-//    }
+    @Test
+    public void testLiveStream() throws Throwable {
+        VideoMeta expMeta = new VideoMeta("EEIk7gwjgIM", "NASA ISS Live Stream - Earth From Space | ISS Live Feed: ISS Tracker + Live Chat",
+                "Space Videos", "UCakgsb0w7QB0VHdnCc-OVEA", 0, 0, true, "");
+        extractorTest("http://www.youtube.com/watch?v=EEIk7gwjgIM", expMeta);
+        int[] expectedItags = new int[] { 91, 92, 93, 94, 95, 96 };
+        extractorTestExpectedItags("http://www.youtube.com/watch?v=EEIk7gwjgIM", expMeta, expectedItags);
+    }
 
 
     private void extractorTestDashManifest(final String youtubeLink)
@@ -135,6 +140,7 @@ public class ExtractorTestCases {
                         assertEquals(expMeta.getAuthor(), videoMeta.getAuthor());
                         assertEquals(expMeta.getChannelId(), videoMeta.getChannelId());
                         assertEquals(expMeta.getVideoLength(), videoMeta.getVideoLength());
+                        assertEquals(expMeta.isLiveStream(), videoMeta.isLiveStream());
                         assertNotSame(0, videoMeta.getViewCount());
                         assertNotNull(ytFiles);
                         int itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size()));
@@ -150,6 +156,63 @@ public class ExtractorTestCases {
         signal.await(10, TimeUnit.SECONDS);
 
         assertNotNull(testUrl);
+
+        final URL url = new URL(testUrl);
+
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        int code = con.getResponseCode();
+        con.getInputStream().close();
+        con.disconnect();
+        assertEquals(200, code);
+    }
+
+    private void extractorTestExpectedItags(final String youtubeLink, final VideoMeta expMeta, final int[] mustIncludeItags)
+            throws Throwable {
+        final CountDownLatch signal = new CountDownLatch(1);
+        YouTubeExtractor.LOGGING = true;
+
+        testUrl = null;
+
+        final ArrayList<Integer> actualItags = new ArrayList<>();
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            @Override
+            public void run() {
+                final YouTubeExtractor ytEx = new YouTubeExtractor(getInstrumentation()
+                        .getTargetContext()) {
+                    @Override
+                    public void  onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
+                        assertEquals(expMeta.getVideoId(), videoMeta.getVideoId());
+                        assertEquals(expMeta.getTitle(),videoMeta.getTitle());
+                        assertEquals(expMeta.getAuthor(), videoMeta.getAuthor());
+                        assertEquals(expMeta.getChannelId(), videoMeta.getChannelId());
+                        assertEquals(expMeta.getVideoLength(), videoMeta.getVideoLength());
+                        assertEquals(expMeta.isLiveStream(), videoMeta.isLiveStream());
+                        assertNotSame(0, videoMeta.getViewCount());
+                        assertNotNull(ytFiles);
+                        int itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size()));
+                        testUrl = ytFiles.get(itag).getUrl();
+                        Log.d(EXTRACTOR_TEST_TAG, "Testing itag: " + itag +", url:" + testUrl);
+                        for (int i = 0; i < ytFiles.size(); i++) {
+                            int foundItag = ytFiles.keyAt(i);
+                            actualItags.add(foundItag);
+                        }
+                        signal.countDown();
+                    }
+                };
+                ytEx.extract(youtubeLink, false, true);
+            }
+        });
+
+        signal.await(10, TimeUnit.SECONDS);
+
+        assertNotNull(testUrl);
+
+        for (int expectedItag : mustIncludeItags) {
+            String msg = "actualItags contains expected itag value '" + expectedItag + "'";
+            assertTrue(msg, actualItags.contains(expectedItag));
+        }
 
         final URL url = new URL(testUrl);
 
