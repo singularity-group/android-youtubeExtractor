@@ -96,6 +96,26 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         FORMAT_MAP.put(43, new Format(43, "webm", 360, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
         FORMAT_MAP.put(18, new Format(18, "mp4", 360, Format.VCodec.H264, Format.ACodec.AAC, 96, false));
         FORMAT_MAP.put(22, new Format(22, "mp4", 720, Format.VCodec.H264, Format.ACodec.AAC, 192, false));
+        FORMAT_MAP.put(34, new Format(34, "3gp", 360, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+        FORMAT_MAP.put(35, new Format(35, "flv", 480, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+        FORMAT_MAP.put(36, new Format(36, "3gp", 240, Format.VCodec.MPEG4, Format.ACodec.AAC, 32, false));
+        FORMAT_MAP.put(37, new Format(37, "mp4", 1080, Format.VCodec.H264, Format.ACodec.AAC, 192, false));
+        FORMAT_MAP.put(38, new Format(38, "mp4", 3072, Format.VCodec.H264, Format.ACodec.AAC, 192, false));
+        FORMAT_MAP.put(43, new Format(43, "webm", 360, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
+        FORMAT_MAP.put(44, new Format(44, "webm", 480, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
+        FORMAT_MAP.put(45, new Format(45, "webm", 720, Format.VCodec.VP8, Format.ACodec.VORBIS, 192, false));
+        FORMAT_MAP.put(46, new Format(46, "webm", 1080, Format.VCodec.VP8, Format.ACodec.VORBIS, 192, false));
+        FORMAT_MAP.put(59, new Format(59, "mp4", 480, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+        FORMAT_MAP.put(78, new Format(78, "mp4", 480, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+
+        // 3D Videos
+        FORMAT_MAP.put(82, new Format(82, "mp4", 360, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+        FORMAT_MAP.put(83, new Format(83, "mp4", 480, Format.VCodec.H264, Format.ACodec.AAC, 128, false));
+        FORMAT_MAP.put(84, new Format(84, "mp4", 720, Format.VCodec.H264, Format.ACodec.AAC, 192, false));
+        FORMAT_MAP.put(85, new Format(85, "mp4", 1080, Format.VCodec.H264, Format.ACodec.AAC, 192, false));
+        FORMAT_MAP.put(100, new Format(100, "webm", 360, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
+        FORMAT_MAP.put(101, new Format(101, "webm", 480, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
+        FORMAT_MAP.put(102, new Format(102, "webm", 720, Format.VCodec.VP8, Format.ACodec.VORBIS, 128, false));
 
         // Dash Video
         FORMAT_MAP.put(160, new Format(160, "mp4", 144, Format.VCodec.H264, Format.ACodec.NONE, true));
@@ -125,7 +145,6 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         FORMAT_MAP.put(248, new Format(248, "webm", 1080, Format.VCodec.VP9, Format.ACodec.NONE, true));
         FORMAT_MAP.put(271, new Format(271, "webm", 1440, Format.VCodec.VP9, Format.ACodec.NONE, true));
         FORMAT_MAP.put(313, new Format(313, "webm", 2160, Format.VCodec.VP9, Format.ACodec.NONE, true));
-
         FORMAT_MAP.put(302, new Format(302, "webm", 720, Format.VCodec.VP9, 60, Format.ACodec.NONE, true));
         FORMAT_MAP.put(308, new Format(308, "webm", 1440, Format.VCodec.VP9, 60, Format.ACodec.NONE, true));
         FORMAT_MAP.put(303, new Format(303, "webm", 1080, Format.VCodec.VP9, 60, Format.ACodec.NONE, true));
@@ -133,6 +152,7 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
 
         // WEBM Dash Audio
         FORMAT_MAP.put(171, new Format(171, "webm", Format.VCodec.NONE, Format.ACodec.VORBIS, 128, true));
+        FORMAT_MAP.put(172, new Format(172, "webm", Format.VCodec.NONE, Format.ACodec.VORBIS, 256, true));
 
         FORMAT_MAP.put(249, new Format(249, "webm", Format.VCodec.NONE, Format.ACodec.OPUS, 48, true));
         FORMAT_MAP.put(250, new Format(250, "webm", Format.VCodec.NONE, Format.ACodec.OPUS, 64, true));
@@ -145,6 +165,13 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         FORMAT_MAP.put(94, new Format(94, "mp4", 480 ,Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
         FORMAT_MAP.put(95, new Format(95, "mp4", 720 ,Format.VCodec.H264, Format.ACodec.AAC, 256, false, true));
         FORMAT_MAP.put(96, new Format(96, "mp4", 1080 ,Format.VCodec.H264, Format.ACodec.AAC, 256, false, true));
+        FORMAT_MAP.put(120, new Format(120, "flv", 720, Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
+        FORMAT_MAP.put(127, new Format(127, "ts", 0, Format.VCodec.NONE, Format.ACodec.AAC, 96, false, true));
+        FORMAT_MAP.put(128, new Format(128, "ts", 0, Format.VCodec.NONE, Format.ACodec.AAC, 96, false, true));
+        FORMAT_MAP.put(132, new Format(132, "mp4", 240, Format.VCodec.H264, Format.ACodec.AAC, 256, false, true));
+        FORMAT_MAP.put(151, new Format(151, "mp4", 72, Format.VCodec.H264, Format.ACodec.AAC, 256, false, true));
+        FORMAT_MAP.put(300, new Format(300, "ts", 720, Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
+        FORMAT_MAP.put(301, new Format(301, "ts", 1080, Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
     }
 
     public YouTubeExtractor(@NonNull Context con) {
