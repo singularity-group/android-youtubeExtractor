@@ -84,7 +84,7 @@ public class ExtractorTestCases {
 
             @Override
             public void run() {
-                final YouTubeExtractor ytEx = new YouTubeExtractor(InstrumentationRegistry.getContext()) {
+                final YouTubeExtractor ytEx = new YouTubeExtractor(InstrumentationRegistry.getInstrumentation().getContext()) {
                     @Override
                     public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
                         assertNotNull(ytFiles);
