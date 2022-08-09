@@ -49,8 +49,8 @@ public class ExtractorTestCases {
 
     @Test
     public void testEncipheredVideo() throws Throwable {
-        VideoMeta expMeta = new VideoMeta("e8X3ACToii0", "Rise Against - Savior (Official Video)", "RiseAgainstVEVO",
-                "UChMKB2AHNpeuWhalpRYhUaw", 243, 0, false, "");
+        VideoMeta expMeta = new VideoMeta("e8X3ACToii0", "Rise Against - Savior (Official Music Video)", "RiseAgainstVEVO",
+                "UChMKB2AHNpeuWhalpRYhUaw", 242, 0, false, "");
         extractorTest("https://www.youtube.com/watch?v=e8X3ACToii0", expMeta);
     }
 
@@ -64,11 +64,11 @@ public class ExtractorTestCases {
 
     @Test
     public void testLiveStream() throws Throwable {
-        VideoMeta expMeta = new VideoMeta("EEIk7gwjgIM", "NASA ISS Live Stream - Earth From Space | ISS Live Feed: ISS Tracker + Live Chat",
+        VideoMeta expMeta = new VideoMeta("86YLFOog4GM", "Nasa Live Stream - Earth From Space : Live Views from the ISS",
                 "Space Videos", "UCakgsb0w7QB0VHdnCc-OVEA", 0, 0, true, "");
-        extractorTest("http://www.youtube.com/watch?v=EEIk7gwjgIM", expMeta);
+        extractorTest("https://www.youtube.com/watch?v=86YLFOog4GM", expMeta);
         int[] expectedItags = new int[] { 91, 92, 93, 94, 95, 96 };
-        extractorTestExpectedItags("http://www.youtube.com/watch?v=EEIk7gwjgIM", expMeta, expectedItags);
+        extractorTestExpectedItags("https://www.youtube.com/watch?v=86YLFOog4GM", expMeta, expectedItags);
     }
 
 
