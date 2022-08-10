@@ -4,6 +4,14 @@ import androidx.annotation.NonNull;
 
 public class Format {
 
+    /** Identifier for the hls manifest url (master playlist url)
+     * This value is made-up, it is not a real itag value used by YouTube. */
+    public static final int HLS_MANIFEST_ITAG = -2;
+
+    /** Identifier for the dash manifest url
+     * This value is made-up, it is not a real itag value used by YouTube. */
+    public static final int DASH_MANIFEST_ITAG = -3;
+
     public enum VCodec {
         H263, H264, MPEG4, VP8, VP9, NONE
     }

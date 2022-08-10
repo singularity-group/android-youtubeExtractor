@@ -1,5 +1,8 @@
 package at.huber.youtubeExtractor;
 
+import static at.huber.youtubeExtractor.Format.DASH_MANIFEST_ITAG;
+import static at.huber.youtubeExtractor.Format.HLS_MANIFEST_ITAG;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -162,6 +165,10 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         FORMAT_MAP.put(151, new Format(151, "mp4", 72, Format.VCodec.H264, Format.ACodec.AAC, 256, false, true));
         FORMAT_MAP.put(300, new Format(300, "ts", 720, Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
         FORMAT_MAP.put(301, new Format(301, "ts", 1080, Format.VCodec.H264, Format.ACodec.AAC, 128, false, true));
+
+        FORMAT_MAP.put(HLS_MANIFEST_ITAG, new Format(HLS_MANIFEST_ITAG, "m3u8", 0, Format.VCodec.NONE, Format.ACodec.NONE, 0, false, true));
+
+        FORMAT_MAP.put(DASH_MANIFEST_ITAG, new Format(DASH_MANIFEST_ITAG, "mpd", 0, Format.VCodec.NONE, Format.ACodec.NONE, 0, false, true));
     }
 
     public YouTubeExtractor(@NonNull Context con) {
@@ -299,6 +306,19 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
                         }
                     }
                 }
+            }
+            // add master playlist formats
+            String hlsManifestUrl = streamingData.optString("hlsManifestUrl");
+            if (!hlsManifestUrl.isEmpty()) {
+                ytFiles.put(HLS_MANIFEST_ITAG, new YtFile(FORMAT_MAP.get(HLS_MANIFEST_ITAG), hlsManifestUrl));
+            }
+            String dashManifestUrl = streamingData.optString("dashManifestUrl");
+            if (!dashManifestUrl.isEmpty()) {
+                ytFiles.put(DASH_MANIFEST_ITAG, new YtFile(FORMAT_MAP.get(DASH_MANIFEST_ITAG), hlsManifestUrl));
+            }
+            if (LOGGING) {
+                Log.d(LOG_TAG, "hlsManifestUrl: " + hlsManifestUrl);
+                Log.d(LOG_TAG, "dashManifestUrl: " + dashManifestUrl);
             }
 
             JSONObject videoDetails = ytPlayerResponse.getJSONObject("videoDetails");
