@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "at.huber.sampleDownload"
-        minSdkVersion 14
+        minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 32
         versionCode 2
