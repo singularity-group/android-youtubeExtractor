@@ -2,6 +2,8 @@ package at.huber.youtubeExtractor;
 
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.filters.FlakyTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -67,7 +69,7 @@ public class ExtractorTestCases {
         VideoMeta expMeta = new VideoMeta("86YLFOog4GM", "\uD83C\uDF0E Nasa Live Stream  - Earth From Space :  Live Views from the ISS",
                 "Space Videos", "UCakgsb0w7QB0VHdnCc-OVEA", 0, 0, true, "");
         int[] expectedItags = new int[] { Format.HLS_MANIFEST_ITAG };
-        extractorTest("https://www.youtube.com/watch?v=86YLFOog4GM", expMeta, expectedItags);
+        extractorTest("https://www.youtube.com/watch?v=86YLFOog4GM", expMeta, expectedItags, "application/vnd.apple.mpegurl");
     }
 
 
@@ -121,10 +123,10 @@ public class ExtractorTestCases {
 
     private void extractorTest(final String youtubeLink, final VideoMeta expMeta)
             throws Throwable {
-        extractorTest(youtubeLink, expMeta, new int[0]);
+        extractorTest(youtubeLink, expMeta, new int[0], null);
     }
 
-    private void extractorTest(final String youtubeLink, final VideoMeta expMeta, final int[] mustIncludeItags)
+    private void extractorTest(final String youtubeLink, final VideoMeta expMeta, final int[] mustIncludeItags, @Nullable String expContentType)
             throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
         YouTubeExtractor.LOGGING = true;
@@ -148,7 +150,12 @@ public class ExtractorTestCases {
                         assertEquals(expMeta.isLiveStream(), videoMeta.isLiveStream());
                         assertNotSame(0, videoMeta.getViewCount());
                         assertNotNull(ytFiles);
-                        int itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size()));
+                        int itag;
+                        if (mustIncludeItags.length > 0) {
+                            itag = mustIncludeItags[0];
+                        } else {
+                            itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size()));
+                        }
                         testUrl = ytFiles.get(itag).getUrl();
                         Log.d(EXTRACTOR_TEST_TAG, "Testing itag: " + itag + ", url:" + testUrl);
                         for (int i = 0; i < ytFiles.size(); i++) {
@@ -179,6 +186,10 @@ public class ExtractorTestCases {
         con.getInputStream().close();
         con.disconnect();
         assertEquals(200, code);
+        if (expContentType != null) {
+            // check that the video at url is of the expected content type
+            assertEquals(expContentType, con.getContentType());
+        }
     }
 
 }
