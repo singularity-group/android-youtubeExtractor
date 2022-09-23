@@ -11,9 +11,7 @@ android {
 }
 
 dependencies {
-    implementation('com.github.evgenyneu:js-evaluator-for-android:v5.0.0') {
-        exclude module: 'appcompat-v7'
-    }
+    implementation 'com.github.singularity-group:js-evaluator-for-android:cc8c7fe371'
     implementation 'androidx.annotation:annotation:1.3.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
