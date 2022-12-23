@@ -17,6 +17,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
+        // Workaround for jitpack outage COS-145086
+        maven { url "https://public-share-big-files.s3.us-east-2.amazonaws.com/jitpack_repo" }
+//        maven { url "https://jitpack.io" }
     }
 }
