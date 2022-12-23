@@ -1,4 +1,7 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish' // Publishing code taken from https://stackoverflow.com/a/42160584
+}
 
 android {
     compileSdkVersion 32
@@ -6,7 +9,16 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 32
+        versionName "2c9ba872b2" // the version that dependents will use
+
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -16,4 +28,27 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test:rules:1.4.0'
+}
+
+// To publish, run ./gradlew :youtubeExtractor:publishAllPublicationsToMyrepoRepository
+// (then upload files to static file hosting)
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId 'com.github.singularity-group'
+                artifactId 'android-youtubeExtractor'
+                version = android.defaultConfig.versionName
+            }
+        }
+        repositories {
+            repositories {
+                maven {
+                    name = 'myrepo'
+                    url = "${project.buildDir}/repo"
+                }
+            }
+        }
+    }
 }
