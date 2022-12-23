@@ -12,7 +12,7 @@ android {
 
 dependencies {
     implementation 'com.github.singularity-group:js-evaluator-for-android:cc8c7fe371'
-    implementation 'androidx.annotation:annotation:1.3.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test:rules:1.4.0'
